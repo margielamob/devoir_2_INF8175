@@ -23,7 +23,9 @@ var int: longueur;
 constraint frequences[1] = 0;
 constraint longueur = frequences[m];
 constraint alldifferent(distances);
-
+constraint forall(i in 1..(length(frequences) - 1)) (
+    frequences[i] < frequences[i + 1]
+);
 solve minimize longueur;
 %-----------------------------------------------------------------------------%
 
