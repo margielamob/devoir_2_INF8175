@@ -1,6 +1,5 @@
 import argparse
 import time
-
 import random_solver
 import solver
 from uflp import UFLP

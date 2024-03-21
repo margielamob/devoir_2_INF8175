@@ -1,5 +1,5 @@
-% NOM_ETUDIANT_1 (MATRICULE_1)
-% NOM_ETUDIANT_2 (MATRICULE_2)
+% Sébastien Hogues (2087357)
+% Ahmed El Shami (MATRICULE_2)
 
 include "globals.mzn";
 
@@ -12,8 +12,7 @@ int: n = m*m;
 array[1..m] of var 0..n: frequences;
 
 % Calcul des distances entre les différentes fréquences
-array[1..(m*(m-1)) div 2] of var 0..n: distances =
-    [ frequences[j] - frequences[i] | i in 1..m, j in i+1..m];
+array[1..(m*(m-1)) div 2] of var 0..n: distances = [ frequences[j] - frequences[i] | i in 1..m, j in i+1..m];
 
 % Variable objectif à minimiser
 var int: longueur;
@@ -21,9 +20,11 @@ var int: longueur;
 %-----------------------------------------------------------------------------%
 % Partie étudiant
 %-----------------------------------------------------------------------------%
+constraint frequences[1] = 0;
+constraint longueur = frequences[m];
+constraint alldifferent(distances);
 
-
-
+solve minimize longueur;
 %-----------------------------------------------------------------------------%
 
 output 

@@ -51,7 +51,7 @@ class UFLP():
     
          
 
-    def calculate_cost(self,main_stations_opened: List[int], satellite_stations_association: list[int]) -> float:
+    def calculate_cost(self,main_stations_opened: List[int], satellite_stations_association: List[int]) -> float:
         """Calculate the cost of a solution
 
         Args:
@@ -89,7 +89,7 @@ class UFLP():
         """
         return self.satellite_stations_connection_cost[main_station][satellite_station]
     
-    def show_solution(self,main_stations_opened: List[int], satellite_stations_association: list[int]) -> None:
+    def show_solution(self,main_stations_opened: List[int], satellite_stations_association: List[int]) -> None:
         """Show the solution on a plot
 
         Args:
@@ -125,7 +125,7 @@ class UFLP():
         plt.show()
 
 
-    def solution_checker(self, main_stations_opened: List[int], satellite_stations_association: list[int]):
+    def solution_checker(self, main_stations_opened: List[int], satellite_stations_association: List[int]):
         """Check if a solution is valid
         
         Args:
