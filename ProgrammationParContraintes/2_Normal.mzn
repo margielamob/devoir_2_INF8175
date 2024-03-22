@@ -22,9 +22,26 @@ var int: total_commun;
 %-----------------------------------------------------------------------------%
 % Partie étudiant
 %-----------------------------------------------------------------------------%
+var int: frequencyB = count(terrain, B);
+var int: frequencyR = count(terrain, R);
+
+constraint frequencyB = frequencyR;
+
+constraint forall(i in dim) ( (sum(j in dim)(terrain[i,j]=R)) * (sum(j in dim)(terrain[i,j]=B)) = 0);
+constraint forall(j in dim) ( (sum(i in dim)(terrain[i,j]=R)) * (sum(i in dim)(terrain[i,j]=B)) = 0);
+
+constraint forall(k in 3..(2*n-1)) ( (sum(i in dim)(if k-i in dim then terrain[i,k-i]=R else 0 endif)) * 
+                                     (sum(i in dim)(if k-i in dim then terrain[i,k-i]=B else 0 endif)) = 0);
+                                     
+constraint forall(k in (2-n)..(n-2)) ( (sum(i in dim)(if i-k in dim then terrain[i,i-k]=R else 0 endif)) * 
+                                       (sum(i in dim)(if i-k in dim then terrain[i,i-k]=B else 0 endif)) = 0);
+                                       
+% constrainte de symétrie
 
 
+constraint total_commun = frequencyR;
 
+solve maximize total_commun;
 %-----------------------------------------------------------------------------%
 output 
 ["Terrain :\n"]
