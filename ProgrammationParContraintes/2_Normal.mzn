@@ -35,9 +35,18 @@ constraint forall(k in 3..(2*n-1)) ( (sum(i in dim)(if k-i in dim then terrain[i
                                      
 constraint forall(k in (2-n)..(n-2)) ( (sum(i in dim)(if i-k in dim then terrain[i,i-k]=R else 0 endif)) * 
                                        (sum(i in dim)(if i-k in dim then terrain[i,i-k]=B else 0 endif)) = 0);
-                                       
-% constrainte de symétrie
 
+
+int: half = n div 2;
+% contrainte de symétrie 1
+var int: blue_count_upper_half = sum(i in 1..half, j in dim)(terrain[i,j]=B);
+var int: blue_count_lower_half = sum(i in half+1..n, j in dim)(terrain[i,j]=B);
+constraint blue_count_upper_half >= blue_count_lower_half;
+      
+% contrainte de symétrie 2
+var int: blue_count_left_half = sum(i in dim, j in 1..half)(terrain[i,j]=B);
+var int: blue_count_right_half = sum(i in dim, j in half+1..n)(terrain[i,j]=B);
+constraint blue_count_left_half >= blue_count_right_half;
 
 constraint total_commun = frequencyR;
 
