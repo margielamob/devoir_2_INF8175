@@ -30,8 +30,57 @@ var int: objectif_match_espaces;
 %-----------------------------------------------------------------------------%
 % Partie étudiant
 %-----------------------------------------------------------------------------%
+% contrainte #1
+constraint forall(e1,e2 in equipes where e1!=e2)(
+    calendrier[e1,dates[e1,e2].1] = calendrier[e2,dates[e1,e2].1] 
+    /\
+    calendrier[e1,dates[e1,e2].2] = calendrier[e2,dates[e1,e2].2]
+);
+% contrainte #2
+constraint forall(e1,e2 in equipes where e1!=e2)(
+    (to_enum(equipes,calendrier[e1,dates[e1,e2].1]) = e1 \/
+     to_enum(equipes,calendrier[e2,dates[e1,e2].1]) = e2)
+    /\
+    (to_enum(equipes,calendrier[e1,dates[e1,e2].2]) = e1 \/ 
+     to_enum(equipes,calendrier[e2,dates[e1,e2].2]) = e2)
+);
+% contrainte 3
+constraint forall(j in jours,t in terrains where t>0)(
+              sum(e in equipes)(calendrier[e,j]=t) <= 2);
+
+% contrainte 4
+constraint forall(e in equipes, j in jours where
+    sum(e2 in equipes where e2 != e) ( if (dates[e, e2].1 = j \/ dates[e, e2].2 = j) then 1 else 0 endif )=0)(
+    calendrier[e, j] = 0
+);
 
 
+% contrainte 5
+constraint forall(e in equipes)(sum(j in jours)(to_enum(equipes, calendrier[e,j])=e) <= 7);
+
+% contrainte 6
+% définir rencontre en premier
+constraint forall(e1, e2 in equipes where e1!=e2)(
+  rencontres[e1, e2] = (if calendrier[e1,dates[e1,e2].1]>0 then 1 else 0 endif) +
+                       (if calendrier[e1,dates[e1,e2].2]>0 then 1 else 0 endif)
+);
+
+constraint forall(e1,e2 in equipes where e1 != e2)(rencontres[e1,e2]=2);
+
+% contrainte 7
+constraint forall(e1, e2 in equipes)(
+   dates[e1, e2].2 - dates[e1, e2].1 > 3
+);
+
+% contrainte 8
+constraint forall(e1, e2 in equipes where e1 != e2)(
+    calendrier[e1,dates[e1,e2].1] != calendrier[e1,dates[e1,e2].2]
+);
+
+constraint objectif_match_espaces = sum(e1, e2 in equipes where e1 > e2)
+                                       (if abs(dates[e1, e2].2 - dates[e1, e2].1) > 6 then 1 else 0 endif);
+                                       
+solve maximize objectif_match_espaces;
 %-----------------------------------------------------------------------------%
 
 % Affichage du calendrier par equipes et par jours puis du résultat de la fonction objectif.
